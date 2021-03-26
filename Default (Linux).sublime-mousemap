@@ -1,0 +1,11 @@
+[
+  // Change font size with ctrl+scroll wheel
+  { "button": "scroll_down", "modifiers": ["ctrl"], "command": "null" },
+  { "button": "scroll_up", "modifiers": ["ctrl"], "command": "null" },
+  // this pastes the selection where the caret – not the pointer – is.
+  { "button": "button3", "command": "paste", "args": {"clipboard": "selection"} },
+
+  // { "button": "button1", "command": "noop"},
+  // { "button": "button2", "command": "noop"},
+
+]

@@ -1,0 +1,5 @@
+[
+    { "command": "move", "args": {"by": "characters", "forward": true, "extend": true} },
+    { "command": "increment"},
+    { "command": "move", "args": {"by": "characters", "forward": false, "extend": false} },
+]

@@ -1,0 +1,18 @@
+<snippet>
+    <content><![CDATA[
+#+TITLE: ${1:title}
+#+AUTHOR: ${2:author}
+#+LATEX_CLASS: ${3:Palatino|Garamond|Times|Helvetica}.
+#+LATEX_HEADER: \usepackage{nopageno}
+#+LATEX_HEADER: \renewcommand{\LARGE}{\Huge}
+#+REVEAL_THEME: ${4:white-helv}
+#+REVEAL_INIT_OPTIONS: transition: 'none'
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>head</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>text.org</scope>
+    <description>Common Org mode header options</description>
+
+</snippet>

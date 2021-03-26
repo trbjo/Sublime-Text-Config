@@ -1,0 +1,6 @@
+// Settings in here override those in "LSP-bash/LSP-bash.sublime-settings"
+
+{
+    "command": ["/usr/bin/node", "/usr/bin/bash-language-server", "start"],
+
+}

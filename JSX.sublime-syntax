@@ -1,0 +1,589 @@
+%YAML 1.2
+---
+name: JSX
+file_extensions: [jsx]
+scope: source.js.jsx
+variables:
+  reservedWords: "(async|arguments|break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|function|from|if|import|in|instanceof|new|return|super|switch|this|throw|try|typeof|var|void|while|with|yield|enum|implements|interface|let|package|private|protected|public|static|await|abstract|boolean|byte|char|double|final|float|goto|int|long|native|short|synchronized|throws|transient|volatile)"
+  typeWords: "(type|declare|interface)"
+  builtInObjects: "(console|Object|Function|Boolean|Symbol|Error|EvalError|InternalError|RangeError|ReferenceError|SyntaxError|TypeError|URIError|Number|Math|Date|String|RegExp|Array|Int8Array|Uint8Array|Uint8ClampedArray|Int16Array|Uint16Array|Int32Array|Uint32Array|Float32Array|Float64Array|Map|Set|WeakMap|WeakSet|SIMD|ArrayBuffer|SharedArrayBuffer|Atomics|DataView|JSON|Promise|Generator|GeneratorFunction|AsyncFunction|Reflect|Proxy|Intl|WebAssembly|Iterator|ParallelArray|StopIteration)"
+  builtInFunctions: "(eval|isFinite|isNaN|parseFloat|parseInt|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|unescape)"
+  constantWords: "(true|false|null|Infinity|NaN|undefined)"
+  tagStart: '<(?=[_$a-zA-Z])'
+  validTypeSingle: '[\?\w\[\]\.\*{}]*(<.*?>+(?!, ))?(\[\])?'
+  validType: '{{validTypeSingle}}(\s*\|\s*{{validTypeSingle}})*'
+  typeParams: '(?<=:)\s*{{validType}}'
+  type: '[\?\w\[\]\.\*{}()]'
+  returnType: '[\?\w\[\]\.\*{}]'
+contexts:
+  main:
+    - include: jsx
+    - include: javascript
+
+  
+  #
+  # JSX
+  # 
+  
+  jsx:
+    - match: '{{tagStart}}'
+      scope: entity.name.tag.jsx
+      push: jsxSection
+    - match: (?<=[\w\/])\>
+      scope: entity.name.tag.jsx
+
+  jsxSection:
+    - meta_scope: meta.jsx
+    - include: jsxTags
+
+
+  jsxSectionInner: 
+    - meta_scope: meta.jsx
+    - include: jsxTags
+
+  jsxTags:
+    
+    - include: strings
+    
+    - match: '\s[a-zA-Z_]*(?=[=\s])'
+      scope: entity.other.attribute-name
+
+    - match: '\b\w*\b'
+      scope: entity.name.tag.jsx
+
+    - match: '[-_\$]'
+      scope: entity.name.tag.jsx
+
+    - match: \=
+      scope: entity.name.tag.jsx
+
+    # Recursion
+    - match: '{{tagStart}}'
+      scope: entity.name.tag.jsx
+      push: jsxSectionInner
+
+    # Embedding
+    - match: \{
+      scope: entity.name.tag.jsx
+      push: javascriptEmbedded
+    
+    # End
+    - match: '<?\/\w*'
+      scope: entity.name.tag.jsx
+      pop: true
+
+    - match: '>'
+      scope: entity.name.tag.jsx
+      push:
+        - include: comments
+        - match: \{
+          scope: entity.name.tag.jsx
+          push: javascriptEmbedded
+        - match: (?=<)
+          pop: true
+
+  javascriptEmbedded:
+    - clear_scopes: 1
+    - meta_scope: source.js.jsx
+    - include: jsx
+    - include: javascript
+
+    - match: '\{'
+      push: jsEmbeddedInner
+
+    - match: '\}'
+      scope: entity.name.tag.jsx
+      pop: true
+  
+  jsEmbeddedInner:
+    - clear_scopes: 1
+    - meta_scope: source.js.jsx
+    - include: jsx
+    - include: javascript
+
+    - match: '\{'
+      push: jsEmbeddedInner
+
+    - match: '\}'
+      pop: true
+    
+  #
+  # JS
+  # 
+  
+  javascript: 
+    - include: types
+    - include: keywords
+    - include: constants
+    - include: strings
+    - include: comments
+    - include: support
+    # - include: bracketsGroup
+
+  comments: 
+    - scope: comment.block.jsx
+      match: \{/\*
+      push:
+        - meta_scope: comment.block.jsx
+        - match: \*/\}
+          pop: true
+    - scope: comment.block.js
+      match: /\*
+      push:
+        - meta_scope: comment.block.js
+        - match: \*/
+          pop: true
+
+    - scope: comment.line.js
+      match: (//).*$\n?
+
+    - match: ^#!.*$
+      scope: comment.line.shebang.js
+
+  keywords:
+    - match: '(?<![.])\b{{reservedWords}}\b'
+      scope: keyword.control.js
+
+  constants:
+    - match: '(?<![.])\b{{constantWords}}\b'
+      scope: constant.language.js
+    - match: >-
+        (?xi)
+          (?:\B[-+])?
+          (?:
+            \b0b[0-1]*|                 # binary
+            \b0o[0-7]*|                 # octal
+            \b0x[0-9a-f]*|              # hex
+            (
+              \B\.[0-9]+|               # e.g. .999
+              \b[0-9]+(\.[0-9]*)?       # e.g. 999.999, 999. or 999
+            )(e[-+]?[0-9]+)?            # e.g. e+123, E-123
+          )
+      scope: constant.numeric.js
+
+  constantEntity:
+    - match: (&[\w#]*?;)
+      scope: constant.character.entity.html  
+
+  constantEscape:
+    - match: \\.
+      scope: constant.character.escape
+
+  strings: 
+    - match: "'"
+      push: stringSingle
+    - match: "\""
+      push: stringDouble
+    - match: "`"
+      push: stringTemplate
+    - match: (?<=[=(:]|^|return|&&|\|\||!)\s*(/)(?![/*+{}?>])
+      push: stringRegex
+
+  stringSingle: 
+    - meta_scope: string.quoted.js
+    - include: constantEscape
+    - include: constantEntity
+    - match: "'"
+      pop: true
+
+  stringDouble: 
+    - meta_scope: string.quoted.js
+    - include: constantEscape
+    - include: constantEntity
+    - match: "\""
+      pop: true
+
+  stringRegex:
+    - meta_scope: string.regexp.js
+    - include: constantEscape
+    - match: \[
+      push: 
+        - meta_scope: meta.regexpCharacterClass
+        - include: constantEscape
+        - match: \]
+          pop: true
+    - match: '/[gimuy]?'
+      pop: true
+
+  stringTemplate:
+    - meta_scope: string.quoted.js
+    - include: constantEscape
+    - include: constantEntity
+    - match: (?<=\${)
+      push: templateExpressions
+    - match: "`"
+      pop: true
+
+  templateExpressions:
+    - clear_scopes: true
+    - include: javascript
+    - include: jsx
+    - match: \}
+      scope: string.quoted.js
+      pop: true
+
+  support:
+    - match: \b{{builtInObjects}}\b
+      scope: support.class.js
+    - match: \b{{builtInFunctions}}\b
+      scope: support.function.js
+    
+    - match: (?<=console\.)(assert|clear|count|dir|dirxml|error|group|groupCollapsed|groupEnd|info|log|profile|profileEnd|table|time|timeEnd|timeStamp|trace|warn)\b
+      scope: support.function.js
+
+    - match: (?<=Object\.)(length|name|arguments|caller|prototype|assign|getOwnPropertyDescriptor|getOwnPropertyDescriptors|getOwnPropertyNames|getOwnPropertySymbols|is|preventExtensions|seal|create|defineProperties|defineProperty|freeze|getPrototypeOf|setPrototypeOf|isExtensible|isFrozen|isSealed|keys|entries|values)\b
+      scope: support.function.js
+    - match: (?<=Function\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=Boolean\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=Symbol\.)(length|name|arguments|caller|prototype|for|keyFor|hasInstance|isConcatSpreadable|iterator|match|replace|search|species|split|toPrimitive|toStringTag|unscopables|observable)\b
+      scope: support.function.js
+    - match: (?<=Error\.)(length|name|arguments|caller|prototype|captureStackTrace|stackTraceLimit)\b
+      scope: support.function.js
+    - match: (?<=EvalError\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=RangeError\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=ReferenceError\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=SyntaxError\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=TypeError\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=URIError\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=Number\.)(length|name|arguments|caller|prototype|isFinite|isInteger|isNaN|isSafeInteger|parseFloat|parseInt|MAX_VALUE|MIN_VALUE|NaN|NEGATIVE_INFINITY|POSITIVE_INFINITY|MAX_SAFE_INTEGER|MIN_SAFE_INTEGER|EPSILON)\b
+      scope: support.function.js
+    - match: (?<=Math\.)(abs|acos|acosh|asin|asinh|atan|atanh|atan2|ceil|cbrt|expm1|clz32|cos|cosh|exp|floor|fround|hypot|imul|log|log1p|log2|log10|max|min|pow|random|round|sign|sin|sinh|sqrt|tan|tanh|trunc|E|LN10|LN2|LOG10E|LOG2E|PI|SQRT1_2|SQRT2)\b\b
+      scope: support.function.js
+    - match: (?<=Date\.)(length|name|arguments|caller|prototype|now|parse|UTC)\b
+      scope: support.function.js
+    - match: (?<=String\.)(length|name|arguments|caller|prototype|fromCharCode|fromCodePoint|raw)\b
+      scope: support.function.js
+    - match: (?<=RegExp\.)(length|name|arguments|caller|prototype|input|\$_|lastMatch|\$&|lastParen|\$\+|leftContext|\$\`|rightContext|\$\'|\$1|\$2|\$3|\$4|\$5|\$6|\$7|\$8|\$9)\b
+      scope: support.function.js
+    - match: (?<=Array\.)(length|name|arguments|caller|prototype|isArray|from|of)\b
+      scope: support.function.js
+    - match: (?<=Int8Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Uint8Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Uint8ClampedArray\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Int16Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Uint16Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Int32Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Uint32Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Float32Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Float64Array\.)(length|name|arguments|caller|prototype|BYTES_PER_ELEMENT)\b
+      scope: support.function.js
+    - match: (?<=Map\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=Set\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=WeakMap\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=WeakSet\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=ArrayBuffer\.)(length|name|arguments|caller|prototype|isView)\b
+      scope: support.function.js
+    - match: (?<=DataView\.)(length|name|arguments|caller|prototype)\b
+      scope: support.function.js
+    - match: (?<=JSON\.)(parse|stringify)\b
+      scope: support.function.js
+    - match: (?<=Promise\.)(length|name|arguments|caller|prototype|resolve|reject|all|race)\b
+      scope: support.function.js
+    - match: (?<=Reflect\.)(defineProperty|deleteProperty|apply|construct|get|getOwnPropertyDescriptor|getPrototypeOf|has|isExtensible|ownKeys|preventExtensions|set|setPrototypeOf)\b
+      scope: support.function.js
+    - match: (?<=Proxy\.)(length|name|arguments|caller|revocable)\b
+      scope: support.function.js
+    - match: (?<=Intl\.)(DateTimeFormat|NumberFormat|Collator|v8BreakIterator|getCanonicalLocales)\b
+      scope: support.function.js
+    - match: (?<=WebAssembly\.)(compile|validate|instantiate|Module|Instance|Table|Memory|CompileError|LinkError|RuntimeError)\b
+      scope: support.function.js
+
+
+
+  #
+  # Types
+  #
+
+  types: 
+    - include: functionDeclarations
+    - include: arrowFunctionDeclarations
+    - include: classDeclaration
+
+    # Generics as Types
+    - match: (?<=:)\s*([a-zA-Z_.]+)(<[a-zA-Z_, *]*?>)
+      captures:
+        # color the name
+        1: entity.name.type
+        2: entity.name.type
+
+    # Generic Declarations
+    - match: ([a-zA-Z_.]*)(<[a-zA-Z_, *]*?>)
+      captures:
+        # Dont color the name
+        # 1: entity.name.type
+        2: entity.name.type
+
+    - match: (static )(<.*?>)
+      captures:
+        1: keyword.control.js
+        2: entity.name.type
+
+
+    # Variables
+    - match: '^\s*(const|let|var)(?:\s+\w*:\s*)(.*?)\s*='
+      captures:
+        1: keyword.control.js
+        2: entity.name.type
+
+    # Object Type
+    - match: '^(export\s)?({{typeWords}}\b)(.*?=\s*)({)'
+      captures:
+        1: keyword.control.js
+        2: keyword.control.js
+      push: typeObjectDeclarations
+
+    - match: '^(import\s)(type\b)'
+      captures:
+        1: keyword.control.js
+        2: keyword.control.js
+
+    # Other Types
+    - match: '^(export\s)?({{typeWords}}\b)(.*?=)'
+      captures:
+        1: keyword.control.js
+        2: keyword.control.js
+      push: typeDeclarations
+
+
+
+  typeObjectDeclarations:
+    - meta_scope: meta.objectType.js meta.type.js
+    - include: comments
+    - match: '}[;|]'
+      pop: true
+    - match: '[^;]'
+      scope: entity.name.type
+
+  typeDeclarations:
+    - meta_scope: meta.type.js
+    - include: comments
+    - match: '[^;]'
+      scope: entity.name.type
+    - match: ';'
+      pop: true
+
+  typeStack:
+    - include: comments
+    - include: typeStackDeep
+    - match: '\,'
+      pop: true
+    - match: (?=\=[^>])
+      pop: true
+    - match: '(?=\):?)'
+      pop: true
+    - match: '[^,]'
+      scope: entity.name.type.js
+
+  typeStackDeep:
+    - match: '\('
+      push: typeStackDeepFunction
+    - match: '\{'
+      push: typeStackDeepObject
+    - match: '\<'
+      push: typeStackDeepPoly
+
+
+  typeStackDeepObject:
+    - meta_scope: entity.name.type.js
+    - match: \{
+      push: typeStackDeepObject
+    - match: \}
+      pop: true
+
+  typeStackDeepPoly:
+    - meta_scope: entity.name.type.js
+    - match: \<
+      push: typeStackDeepPoly
+    - match: \>
+      pop: true
+
+  typeStackDeepFunction:
+    - meta_scope: entity.name.type.js
+    - match: '\('
+      push: typeStackDeepFunction
+    - match: \)
+      pop: true
+
+
+  #
+  # Functions
+  #
+
+  functionDeclarations:
+    # `declare function` is different to normal usage
+    # the block will never contain {}
+    - match: '(?<=declare function).*?(?=\()'
+      push: 
+        - match: '\('
+          push: functionDeclarationStack
+        
+        # returns
+        - match: '(?<=:).'
+          push: 
+            - meta_scope: entity.name.type.js
+            - match: .(?={\s|\n|;)
+              pop: true
+
+        - match: (?=;)
+          pop: true
+
+    # plain `function` calls
+    - match: '(?<=function)[\s\w]*(?=\()'
+      push: 
+        - match: '\('
+          push: functionDeclarationStack
+        
+        # returns
+        - match: '(?<=:).'
+          push: 
+            - meta_scope: entity.name.type.js
+            - match: .(?={\s|\n|;)
+              pop: true
+
+        - match: (?=\{)
+          pop: true
+
+  functionDeclarationStack:
+    - include: comments
+    - meta_scope: meta.functionDeclarationStack.js
+    - match: '(?=\=[^>])'
+      push:
+          - include: javascript
+          - match: '[,]'
+            pop: true
+          - match: (?=\))
+            pop: true
+    - match: ':\s'
+      push: typeStack
+    - match: '\{'
+      push: jsEmbeddedInner
+    - match: '\('
+      push: functionDeclarationStack
+    - match: '\)'
+      pop: true
+
+  arrowFunctionDeclarations:
+    # opening bracket then word or ) any ammount of not )
+    - match: '\((?=[\w.{)][^\(]*=>)'
+      push: arrowFunctionDeclarationStack
+
+
+    # not return ( or word( then ( anything except => or ) until the line ends
+    - match: '(?<!return\s)(?<!\w.)(?<!=>\s)(?<=\[)\((?!.*(=>|\)))'
+      push: arrowFunctionDeclarationStack
+        
+
+  arrowFunctionDeclarationStack: 
+    - meta_scope: meta.arrowFunctionDeclaration.js
+
+    - match: '(?=\=[^>])'
+      push:
+          - include: javascript
+          - match: ','
+            pop: true
+          - match: (?=\))
+            pop: true
+  
+    - match: '(?<!return\s)(?<![\w.])\((?!.*(=>|\)))'
+      push: arrowFunctionDeclarationStack
+
+    - match: '(?<!\)):\s'
+      push: typeStack
+    - match: '\):?'
+      push: 
+        - include: typeStackDeep
+        - match: '\s?(?=\=\>)'
+          pop: true
+        - match: '.'
+          scope: entity.name.type.js
+
+    - match: '=>'
+      pop: true
+
+
+
+
+  #  
+  # class
+  #
+
+  classDeclaration:
+    - match: \bclass\b(?!:)
+      scope: keyword.control.js
+      set:
+        - match: <
+          push: typeStackDeepPoly
+        - match: \(
+          push: classDeclarationFunctionCall
+        - match: \{
+          set: classBody
+        - include: main
+
+  classDeclarationFunctionCall:
+    - include: main
+    # - include: typeStack
+    - match: \(
+      push: classDeclarationFunctionCall
+    - match: \)
+      pop: true
+
+  classBody: 
+    - meta_scope: meta.classDeclaration.js
+    - include: main
+    - include: classBrackets
+
+    - match: '^\s*\w+:\s*(.*?)(?=[=;])'
+      captures:
+        1: entity.name.type
+
+    - match: '(?<=static)\s*\w+:\s*(.*?)(?=[=;])'
+      captures:
+        1: entity.name.type
+
+    - match: \w*\(
+      push: 
+        - meta_scope: meta.function.declaration
+        - include: classBrackets
+        - include: functionDeclarationStack
+        - match: "(?={)"
+          pop: true
+
+    - match: '(?<=:).'
+      push: 
+        - meta_scope: entity.name.type.js
+        - match: .(?={\n|;)
+          pop: true
+
+    - match: "}"
+      pop: true
+  
+  classBrackets:
+    - match: "{"
+      push: 
+        - meta_scope: meta.classBrackets.js
+        - match: "}"
+          pop: true
+        - include: classBrackets
+        - include: main
+
+

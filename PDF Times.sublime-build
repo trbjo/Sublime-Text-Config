@@ -1,0 +1,4 @@
+    {
+        "cmd": ["pandoc", "-s", "-N", "$file", "-o", "/home/tb/Export/$file_base_name.pdf", "--template", "/home/tb/.config/sublime-text/Packages/User/latex_template.tex", "--variable=Times"],
+        "selector": "text.html.markdown",
+    }

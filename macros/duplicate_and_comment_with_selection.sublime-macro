@@ -1,0 +1,8 @@
+[
+    {"command": "toggle_comment", "args": { "block": false }},
+    {"command": "expand_selection", "args": {"to": "line"} },
+    {"command": "move", "args": {"by": "lines", "forward": false, "extend": true} },
+    {"command": "move_to", "args": {"to": "hardbol", "extend": true}},
+    {"command": "duplicate_line"},
+    {"command": "toggle_comment", "args": { "block": false }},
+]

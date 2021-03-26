@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+#+BEGIN_SRC ${1:TYPE}
+#+END_SRC
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>src</tabTrigger>
+    <scope>text.org</scope>
+</snippet>

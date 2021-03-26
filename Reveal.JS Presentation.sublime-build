@@ -1,0 +1,4 @@
+    {
+        "cmd": ["pandoc", "-s", "$file", "-o", "/home/tb/Export/$file_base_name.html", "-t", "revealjs", "-V", "revealjs-url=/home/tb/.reveal.js"],
+        "selector": "text.html.markdown",
+    }

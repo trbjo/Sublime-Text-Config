@@ -1,0 +1,4 @@
+[
+    { "command": "show_at_center" },
+    { "command": "scroll_lines", "args": {"amount": 9.5 }}
+]

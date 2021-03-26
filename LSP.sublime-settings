@@ -1,0 +1,79 @@
+{
+	"clients": {
+		"LSP-C#": {
+			"command": [
+				"/home/tb/.omnisharp-recent/bin/mono",
+				"--assembly-loader=strict",
+				"--config",
+				"/home/tb/.omnisharp-recent/etc/config",
+				"/home/tb/.omnisharp-recent/omnisharp/OmniSharp.exe",
+				"-z",
+				"--languageserver"
+			],
+			"enabled": true,
+			"selector": "source.cs",
+			"env": { "MSBUILD_EXE_PATH":"/home/tb/.omnisharp-recent/omnisharp/.msbuild/Current/Bin/MSBuild.exe" }
+		},
+		"haskell-language-server-wrapper": {
+			"enabled": false,
+			"command": [
+				"haskell-language-server-wrapper",
+				"--lsp"
+			],
+			"selector": "source.haskell",
+		},
+		"vala": {
+			"enabled": false,
+			"command": ["vala-language-server"],
+			"selector": "source.vala",
+		},
+		"Rust": {
+			"enabled": false,
+			"command": [
+				"rust-analyzer"
+			],
+			"selector": "source.rust",
+		},
+		"rust-analyzer": {
+			"enabled": false,
+		},
+		"pyls": {
+			"enabled": false,
+		},
+		"LSP-json": {
+			"enabled": false,
+		},
+		"LSP-typescript":
+		{
+			"enabled": false,
+		},
+		"LSP-pyright":
+		{
+			"enabled": true,
+		},
+		"LSP-bash":
+		{
+			"enabled": false,
+		},
+		"LSP-yaml":
+		{
+			"enabled": false,
+		},
+	},
+	"diagnostics_gutter_marker": "Packages/User/circle.png",
+	"log_debug": false,
+	"lsp_format_on_save": true,
+	"lsp_code_actions_on_save": {
+		"source.fixAll": true,
+		"source.organizeImports": true,
+	},
+	"diagnostics_panel_include_severity_level": 3,
+	"show_symbol_action_links": false,
+	"show_code_actions": "bulb",
+	"show_diagnostics_count_in_view_status": false,
+	"show_diagnostics_in_view_status": false,
+	"show_diagnostics_panel_on_save": 3,
+	"show_diagnostics_severity_level": 3,
+	"show_references_in_quick_panel": true,
+	"show_view_status": false,
+}

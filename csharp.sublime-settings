@@ -1,0 +1,8 @@
+{
+    "block_caret": true,
+    "gutter": false,
+    // "line_numbers": true,
+    "margin": 7,
+    "scroll_past_end": false,
+    "draw_indent_guides": false,
+}

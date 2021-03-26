@@ -1,0 +1,4 @@
+[
+    { "command": "move", "args": {"by": "lines", "forward": false} },
+    { "command": "show_at_center" },
+]

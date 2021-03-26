@@ -1,0 +1,31 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"C# Snippets",
+		"C++11",
+		"Case Conversion",
+		"Dockerfile Syntax Highlighting",
+		"FileIcons",
+		"Gruvbox Dark",
+		"INI",
+		"LSP-bash",
+		"LSP-css",
+		"LSP-json",
+		"LSP-pyright",
+		"LSP-typescript",
+		"LSP-yaml",
+		"nginx",
+		"Package Control",
+		"Pretty JSON",
+		"Razor",
+		"RemoteSubl",
+		"Sass",
+		"TOML",
+		"Vala-TMBundle",
+	],
+	"debug": true,
+}

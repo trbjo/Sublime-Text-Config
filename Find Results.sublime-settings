@@ -1,0 +1,8 @@
+// These settings override both User and Default settings for the Find Results syntax
+{
+    // "highlight_line": true,
+    "scroll_context_lines": 0,
+     "line_numbers": false,
+    "draw_indent_guides": false,
+    "gutter": false,
+}

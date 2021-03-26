@@ -1,0 +1,16 @@
+// These settings override both User and Default settings for the Zorgmode syntax
+{
+        "draw_centered": true,
+        "draw_indent_guides": false,
+        "draw_white_space": [],
+        // "font_face": "Adobe Garamond Pro",
+        "font_size": 10,
+        "wrap_width": 88,
+        "gutter": false,
+        "line_numbers": false,
+        "line_padding_bottom": 5,
+        "line_padding_top": 5,
+        "scroll_past_end": false,
+        "spell_check": true,
+        "word_wrap": true,
+}

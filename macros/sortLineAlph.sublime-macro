@@ -1,0 +1,7 @@
+[
+    {"command": "expand_selection", "args": {"to": "brackets"}},
+    {"command": "split_selection_into_lines" },
+    {"command": "sort_selection", "args": {"case_sensitive": true}},
+    {"command": "single_selection"},
+    {"command": "move", "args": {"by": "characters", "forward": true} },
+]

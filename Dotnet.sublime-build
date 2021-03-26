@@ -1,0 +1,12 @@
+{
+    // "shell_cmd": "dotnet run | sed 's/\\x1B\\[[0-9;]\\+[A-Za-z]//g'",
+    "cmd": ["dotnet", "run"],
+    "working_dir": "/home/tb/Documents/Git/Pilatus.Bank/Pilatus.Bank.WS",
+    "syntax": "Packages/User/Dotnet.sublime-syntax",
+    "selector": "source.cs source.tsx, source.sass",
+    "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Ulrik": "Ulrik"
+    },
+
+}

@@ -1,0 +1,15 @@
+{
+    "target": "csharp_build",
+    "selector": "source.cs",
+    "cancel": {"kill": true},
+    "variants": [
+        {
+            "name": "This Test Only",
+            "thistestonly": true
+        },
+        {
+            "name": "Whole Solution",
+            "wholesolution": true
+        }
+    ]
+}

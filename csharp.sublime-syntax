@@ -1,0 +1,15 @@
+%YAML 1.2
+---
+name: csharp
+scope: text.plain.build
+
+contexts:
+  main:
+    - match: "^Test Run Successful\\.$"
+      scope: string.quoted.double
+    - match: "^Test Run Failed\\.$"
+      scope: markup.deleted
+    - match: "^Failed.*$"
+      scope: markup.deleted
+
+

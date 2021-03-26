@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+#+BEGIN_NOTES
+${1}
+#+END_NOTES
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>notes</tabTrigger>
+    <scope>text.org</scope>
+</snippet>

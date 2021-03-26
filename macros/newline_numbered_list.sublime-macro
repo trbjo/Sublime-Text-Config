@@ -1,0 +1,4 @@
+[
+    { "command": "save_number", "args": {"characters": "\n"} },
+    // { "command": "insert", "args": {"characters": "\n"} },
+]

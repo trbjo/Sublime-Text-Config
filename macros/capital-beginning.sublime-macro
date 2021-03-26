@@ -1,0 +1,8 @@
+[
+    { "command": "move", "args": {"by": "words", "forward": false} },
+    { "command": "move", "args": {"by": "characters", "forward": true, "extend": true} },
+    { "command": "upper_case" },
+    { "command": "move", "args": {"by": "characters", "forward": false, "extend": false} },
+    { "command": "move", "args": {"by": "word_ends", "forward": true} },
+    { "command": "insert", "args": {"characters": " "} },
+]

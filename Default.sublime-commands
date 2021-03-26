@@ -1,0 +1,94 @@
+[
+    { "caption": "Project: Quick Switch", "command": "prompt_select_workspace" },
+    { "caption": "Project: Open Additional", "command": "prompt_open_project_or_workspace" },
+    { "caption": "Project: Switch", "command": "prompt_switch_project_or_workspace" },
+
+    {
+      "caption": "Sort Lines",
+      "command": "run_macro_file",
+      "args":
+      {
+        "file": "res://Packages/User/macros/sort4real.sublime-macro"
+      }
+    },
+
+    {
+      "caption": "Sort Lines (Case Sensitive)",
+      "command": "run_macro_file",
+      "args":
+      {
+        "file": "res://Packages/User/macros/sort4realcase.sublime-macro"
+      }
+    },
+
+  {
+    "caption": "Reveal In Side Bar",
+    "command": "reveal_in_side_bar",
+  },
+
+  {
+    "caption": "Toggle Spell Check",
+    "command": "toggle_setting", "args": {"setting": "spell_check"}
+  },
+
+  {
+    "caption": "Set Danish dictionary",
+    "command": "danish"
+  },
+
+  {
+    "caption": "Show diagnostics nicely",
+    "command": "show_diagnostics_nicely"
+  },
+
+  {
+    "caption": "Set English dictionary",
+    "command": "english"
+  },
+
+  {
+    "caption": "Set German dictionary",
+    "command": "german"
+  },
+
+  {
+    "caption": "Open Org TODO Notes",
+    "command": "open_todo"
+  },
+
+  {
+    "caption": "Org Mode Export To PDF",
+    "command": "org_mode_export_as_pdf"
+  },
+
+  {
+    "caption": "Org Mode Export To HTML",
+    "command": "org_mode_export_as_html_and_open"
+  },
+
+  {
+    "caption": "Org Mode Export To Reveal JS Presentation",
+    "command": "org_mode_export_as_reveal_js_and_open"
+  },
+
+  // {
+  //   "caption": "Set Unix on this file",
+  //   "command": "run_dos_to_unix",
+  // },
+
+  {
+    "caption": "Show Console",
+    "command": "show_panel", "args": {"panel": "console", "toggle": true},
+  },
+
+  // {
+  //   "caption": "Make file executable",
+  //   "command": "set_chmod",
+  // },
+
+  // {
+  //   "caption": "Remove executable bit",
+  //   "command": "remove_chmod",
+  // },
+
+]

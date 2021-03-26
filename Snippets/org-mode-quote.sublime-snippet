@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+#+BEGIN_QUOTE
+${1}
+#+END_QUOTE
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>quote</tabTrigger>
+    <scope>text.org</scope>
+</snippet>

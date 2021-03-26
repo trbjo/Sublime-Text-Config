@@ -1,0 +1,117 @@
+// Documentation at https://www.sublimetext.com/docs/themes.html
+{
+    "variables":
+    {
+
+    },
+    "rules":
+    [
+
+        {
+            "class": "overlay_control",
+            "layer0.texture": "User/assets/overlay-shadow.png",
+            "layer0.inner_margin": [15, 35, 15, 25 ],
+            "layer0.opacity": 0.6,
+            "layer0.tint": [0,0,0, 0.35],
+            "layer1.texture": "User/assets/overlay-border.png",
+            "layer1.inner_margin": [15, 35, 15, 25 ],
+            "layer1.opacity": 1,
+            "layer1.tint": [0,0,0, 0.3],
+            "layer2.texture": "User/assets/overlay-bg.png",
+            "layer2.inner_margin": [15, 35, 15, 25 ],
+            "layer2.opacity": 1,
+            "layer2.tint": "#F4F6F9",
+            "content_margin": [10, 35, 10, 20 ]
+        },
+
+
+        {
+            "class": "text_line_control",
+            "parents": [{"class": "overlay_control"} ],
+            "layer0.texture": "",
+            "layer0.tint": "#707a8c",
+            "layer0.opacity": 1.0,
+            "layer1.tint": "#707a8c",
+            "layer1.inner_margin": [0, 0, 0, 0 ],
+            "content_margin": [22, 7, 10, 4 ]
+        },
+
+        {
+            "class": "quick_panel",
+            "row_padding": [32, 12 ],
+            "layer0.tint": ["background", 1.0],
+            "layer0.opacity": 1
+        },
+        {
+            "class": "quick_panel",
+            "parents": [{"class": "overlay_control"} ],
+            "row_padding": [24, 8 ],
+            "layer0.tint": "var(--background)",
+            "layer0.opacity": 1
+        },
+        {
+            "class": "mini_quick_panel_row",
+            "layer0.inner_margin": [
+                2,
+                2,
+                2,
+                2
+            ],
+            "layer0.tint": "#F4F6F9",
+            "layer0.opacity": 1
+        },
+
+
+
+
+        {
+            "class": "mini_quick_panel_row",
+            "attributes": [
+                "selected"
+            ],
+            "layer0.tint": "var(--accent)",
+        },
+
+
+        {
+            "class": "quick_panel_row",
+            "layer0.texture": "",
+            "layer0.inner_margin": 0,
+            "layer0.tint": "#F4F6F9",
+            "layer0.opacity": 1
+        },
+
+
+
+        {
+            "class": "quick_panel_row",
+            "parents": [{"class": "overlay_control"} ],
+            "layer0.tint": "#F4F6F9",
+            "layer0.opacity": 1.0
+        },
+
+
+        {
+            "class": "quick_panel_row",
+            "attributes": ["selected"],
+            "layer0.tint": "var(--accent)",
+        },
+
+        {
+            "class": "quick_panel_label",
+            "match_fg": "var(--accent)",
+            "selected_match_fg": "#FFFFFF",
+            "fg": "var(--foreground)",
+            "selected_fg": "#FFFFFF",
+        },
+
+        {
+            "class": "quick_panel_path_label",
+            "match_fg": "var(--accent)",
+            "selected_match_fg": "#FFFFFF",
+            "fg": ["foreground", 0.7],
+            "selected_fg": "#FFFFFF",
+        },
+
+    ]
+}

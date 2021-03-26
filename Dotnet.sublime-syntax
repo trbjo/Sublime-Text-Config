@@ -1,0 +1,44 @@
+%YAML 1.2
+---
+name: Dotnet
+scope: text
+
+contexts:
+  main:
+    - match: "(?<=\\d[A-Za-z])warning"
+      scope: dotnet.yellow
+    - match: "^[\\w/]+\\.\\w{1,4}"
+      scope: dotnet.filename
+    - match: "\\(\\d{1,5},\\d{1,3}\\)"
+      scope: dotnet.line_number
+    - match: "(?<=\\d[A-Za-z])info"
+      scope: dotnet.green
+    - match: "(?<=])  info"
+      scope: dotnet.green
+    - match: "(?<=])  warning"
+      scope: dotnet.yellow
+    - match: "^warn"
+      scope: dotnet.yellow
+    - match: "(?<=])  warn"
+      scope: dotnet.yellow
+    - match: "^fail"
+      scope: dotnet.red
+    - match: "^crit"
+      scope: dotnet.red
+    - match: "\\bGET\\b"
+      scope: dotnet.blue
+    - match: "\\bPOST\\b"
+      scope: dotnet.orange
+    - match: "\\bhttps://.+\\b"
+      scope: dotnet.link_blue
+    - match: "\\[[0-9]+[A-Za-z]"
+      scope: dotnet.invisible
+
+  string:
+    - meta_scope: string.quoted.double.service
+    - match: \\.
+      scope: constant.character.escape.service
+    - match: '"'
+      pop: true
+
+

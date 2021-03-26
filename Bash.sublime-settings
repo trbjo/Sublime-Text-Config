@@ -1,0 +1,9 @@
+{
+	"extensions":
+	[
+        "conf",
+        "config",
+		"hosts",
+		".zimrc",
+	],
+}
